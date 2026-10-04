@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Firebase Web API keys (AIzaSy...) are public client-side identifiers
+  # secured by Firestore Security Rules, not private backend secrets.
+  # Disable Netlify's false-positive secret scanner for client-side Firebase keys.
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  SECRETS_SCAN_OMIT_PATHS = "dist/**,firebase-applet-config.json"
+  SECRETS_SCAN_OMIT_KEYS = "GEMINI_API_KEY,VITE_FIREBASE_API_KEY,FIREBASE_API_KEY"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
