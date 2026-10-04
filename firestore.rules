@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email == "maraapna2@gmail.com" &&
+        request.auth.token.email_verified == true;
+    }
+
+    function isValidAppointment(data) {
+      return data.keys().hasAll(['patientName', 'phone', 'age', 'preferredDate', 'problemDescription', 'status', 'userId', 'createdAt']) &&
+        data.keys().hasOnly(['patientName', 'phone', 'age', 'preferredDate', 'problemDescription', 'status', 'userId', 'userEmail', 'createdAt']) &&
+        data.patientName is string && data.patientName.size() >= 2 && data.patientName.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 25 &&
+        data.age is string && data.age.size() >= 1 && data.age.size() <= 10 &&
+        data.preferredDate is string && data.preferredDate.size() >= 4 && data.preferredDate.size() <= 30 &&
+        data.problemDescription is string && data.problemDescription.size() >= 5 && data.problemDescription.size() <= 1000 &&
+        data.status in ['pending', 'confirmed', 'completed', 'cancelled'] &&
+        data.userId is string && data.userId == request.auth.uid &&
+        (!('userEmail' in data) || (data.userEmail is string && data.userEmail.size() <= 150));
+    }
+
+    function isValidReview(data) {
+      return data.keys().hasAll(['authorName', 'rating', 'comment', 'userId', 'createdAt']) &&
+        data.keys().hasOnly(['authorName', 'rating', 'comment', 'tag', 'userId', 'createdAt']) &&
+        data.authorName is string && data.authorName.size() >= 2 && data.authorName.size() <= 100 &&
+        data.rating is number && data.rating >= 1 && data.rating <= 5 &&
+        data.comment is string && data.comment.size() >= 5 && data.comment.size() <= 1000 &&
+        (!('tag' in data) || (data.tag is string && data.tag.size() <= 50)) &&
+        data.userId is string && data.userId == request.auth.uid;
+    }
+
+    // Health check endpoint for connection verification
+    match /test/{docId} {
+      allow get: if true;
+    }
+
+    // Appointments collection
+    match /appointments/{appointmentId} {
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() &&
+        isValidId(appointmentId) &&
+        isValidAppointment(incoming()) &&
+        incoming().status == 'pending' &&
+        incoming().createdAt == request.time;
+      allow update: if isSignedIn() && (
+        isAdmin() ||
+        (
+          resource.data.userId == request.auth.uid &&
+          incoming().userId == existing().userId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'problemDescription', 'preferredDate', 'phone']) &&
+          isValidAppointment(incoming())
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Reviews collection (testimonials)
+    match /reviews/{reviewId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() &&
+        isValidId(reviewId) &&
+        isValidReview(incoming()) &&
+        incoming().createdAt == request.time;
+      allow update, delete: if isAdmin();
+    }
+  }
+}

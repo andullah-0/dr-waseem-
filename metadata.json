@@ -1,0 +1,6 @@
+{
+  "name": "Dr. Waseem Allergy Clinic",
+  "description": "Premier allergy clinic in Karachi led by Dr. Waseem. Specialized treatment for allergic rhinitis, asthma, skin allergies, food allergies, and sinusitis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
