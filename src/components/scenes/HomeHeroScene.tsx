@@ -1,12 +1,13 @@
 import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { SceneCanvas, Float } from './SceneCanvas';
 import { useTheme } from '../../context/ThemeContext';
 
 function PollenParticles({ isDark }: { isDark: boolean }) {
   const pointsRef = useRef<THREE.Points>(null!);
-  const count = 350;
+  const { width } = useThree((state) => state.viewport);
+  const count = width < 6 ? 160 : 320;
 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -16,7 +17,7 @@ function PollenParticles({ isDark }: { isDark: boolean }) {
     const colorAmber = new THREE.Color('#f59e0b');
 
     for (let i = 0; i < count; i++) {
-      const radius = 3.5 + Math.random() * 4.5;
+      const radius = 3.2 + Math.random() * 4.2;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
 
@@ -30,7 +31,7 @@ function PollenParticles({ isDark }: { isDark: boolean }) {
       col[i * 3 + 2] = chosenColor.b;
     }
     return [pos, col];
-  }, [isDark]);
+  }, [isDark, count]);
 
   useFrame((state, delta) => {
     if (pointsRef.current) {
@@ -42,17 +43,11 @@ function PollenParticles({ isDark }: { isDark: boolean }) {
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.06}
+        size={width < 6 ? 0.05 : 0.06}
         vertexColors
         transparent
         opacity={isDark ? 0.8 : 0.6}
@@ -119,10 +114,24 @@ function StylizedLungs({ isDark }: { isDark: boolean }) {
   const rootRef = useRef<THREE.Group>(null!);
   const leftLobeRef = useRef<THREE.Mesh>(null!);
   const rightLobeRef = useRef<THREE.Mesh>(null!);
+  const { width } = useThree((state) => state.viewport);
+
+  // Responsive position and scale for Mobile, Tablet, and Desktop
+  const responsivePosition: [number, number, number] = useMemo(() => {
+    if (width < 5) return [0.5, 0.3, -0.8]; // Mobile: pushed back slightly so text remains prominent
+    if (width < 8) return [1.1, 0.1, -0.3]; // Tablet
+    return [1.5, 0, 0]; // Desktop
+  }, [width]);
+
+  const responsiveScale = useMemo(() => {
+    if (width < 5) return 0.78;
+    if (width < 8) return 0.95;
+    return 1.15;
+  }, [width]);
 
   useFrame((state) => {
-    const targetX = state.pointer.x * 0.5;
-    const targetY = state.pointer.y * 0.3;
+    const targetX = state.pointer.x * 0.4;
+    const targetY = state.pointer.y * 0.25;
 
     if (rootRef.current) {
       rootRef.current.rotation.y += (targetX - rootRef.current.rotation.y) * 0.05;
@@ -140,7 +149,7 @@ function StylizedLungs({ isDark }: { isDark: boolean }) {
   const airwayColor = isDark ? '#2dd4bf' : '#0d9488';
 
   return (
-    <group ref={rootRef} position={[1.4, 0, 0]} scale={1.1}>
+    <group ref={rootRef} position={responsivePosition} scale={responsiveScale}>
       <mesh position={[0, 1.2, 0]}>
         <cylinderGeometry args={[0.09, 0.1, 0.9, 16]} />
         <meshStandardMaterial
@@ -232,6 +241,31 @@ function BronchioleNodes({ isDark }: { isDark: boolean }) {
   );
 }
 
+function ResponsiveSceneElements({ isDark }: { isDark: boolean }) {
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 5.5;
+
+  return (
+    <>
+      <PollenParticles isDark={isDark} />
+      <AllergenMolecule
+        position={isMobile ? [-1.6, 1.6, -0.8] : [-2.4, 1.4, -0.5]}
+        scale={isMobile ? 0.55 : 0.75}
+        isDark={isDark}
+      />
+      <AllergenMolecule
+        position={isMobile ? [-1.4, -1.8, 0] : [-1.8, -1.5, 0.2]}
+        scale={isMobile ? 0.5 : 0.65}
+        isDark={isDark}
+      />
+      {!isMobile && (
+        <AllergenMolecule position={[2.8, -1.8, -0.8]} scale={0.8} isDark={isDark} />
+      )}
+      <StylizedLungs isDark={isDark} />
+    </>
+  );
+}
+
 export const HomeHeroScene: React.FC = () => {
   const { isDark } = useTheme();
 
@@ -245,11 +279,7 @@ export const HomeHeroScene: React.FC = () => {
       <pointLight position={[-4, -2, 2]} intensity={isDark ? 2.5 : 1.5} color={isDark ? '#06b6d4' : '#0284c7'} />
       <pointLight position={[3, 4, 3]} intensity={isDark ? 2.0 : 1.2} color={isDark ? '#14b8a6' : '#0d9488'} />
 
-      <PollenParticles isDark={isDark} />
-      <AllergenMolecule position={[-2.4, 1.4, -0.5]} scale={0.75} isDark={isDark} />
-      <AllergenMolecule position={[-1.8, -1.5, 0.2]} scale={0.65} isDark={isDark} />
-      <AllergenMolecule position={[2.8, -1.8, -0.8]} scale={0.8} isDark={isDark} />
-      <StylizedLungs isDark={isDark} />
+      <ResponsiveSceneElements isDark={isDark} />
     </SceneCanvas>
   );
 };

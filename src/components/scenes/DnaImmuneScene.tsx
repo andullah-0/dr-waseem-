@@ -1,14 +1,15 @@
 import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { SceneCanvas, Float } from './SceneCanvas';
 import { useTheme } from '../../context/ThemeContext';
 
 function DnaHelix({ isDark }: { isDark: boolean }) {
   const groupRef = useRef<THREE.Group>(null!);
-  const count = 30;
-  const radius = 0.8;
-  const height = 5.5;
+  const { width } = useThree((state) => state.viewport);
+  const count = width < 6 ? 22 : 30;
+  const radius = width < 6 ? 0.6 : 0.8;
+  const height = width < 6 ? 4.5 : 5.5;
 
   const helixData = useMemo(() => {
     const pairs = [];
@@ -22,7 +23,7 @@ function DnaHelix({ isDark }: { isDark: boolean }) {
       pairs.push({ x1, y, z1, x2, z2, angle: t });
     }
     return pairs;
-  }, []);
+  }, [count, radius, height]);
 
   useFrame((_, delta) => {
     if (groupRef.current) {
@@ -34,8 +35,10 @@ function DnaHelix({ isDark }: { isDark: boolean }) {
   const strandColor2 = isDark ? '#2dd4bf' : '#0d9488';
   const rungColor = isDark ? '#a78bfa' : '#7c3aed';
 
+  const position: [number, number, number] = width < 6 ? [0.6, 0, -1] : [1.8, 0, 0];
+
   return (
-    <group ref={groupRef} position={[1.8, 0, 0]} rotation={[0.2, 0, 0.15]}>
+    <group ref={groupRef} position={position} rotation={[0.2, 0, 0.15]}>
       {helixData.map((pair, idx) => (
         <group key={idx}>
           <mesh position={[pair.x1, pair.y, pair.z1]}>
@@ -121,6 +124,20 @@ function ImmuneCell({ position, scale = 1, isDark }: { position: [number, number
   );
 }
 
+function ResponsiveDnaContent({ isDark }: { isDark: boolean }) {
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 6;
+
+  return (
+    <>
+      <DnaHelix isDark={isDark} />
+      <ImmuneCell position={isMobile ? [-1.2, 1.4, -0.5] : [-2, 1.2, 0]} scale={isMobile ? 0.65 : 0.9} isDark={isDark} />
+      <ImmuneCell position={isMobile ? [-1.3, -1.5, -0.5] : [-2.4, -1.4, -0.5]} scale={isMobile ? 0.55 : 0.7} isDark={isDark} />
+      {!isMobile && <ImmuneCell position={[0.2, -1.8, 0.5]} scale={0.6} isDark={isDark} />}
+    </>
+  );
+}
+
 export const DnaImmuneScene: React.FC = () => {
   const { isDark } = useTheme();
 
@@ -131,10 +148,7 @@ export const DnaImmuneScene: React.FC = () => {
       <pointLight position={[-3, 2, 2]} intensity={2} color={isDark ? '#06b6d4' : '#0284c7'} />
       <pointLight position={[3, -2, 2]} intensity={2} color={isDark ? '#14b8a6' : '#0d9488'} />
 
-      <DnaHelix isDark={isDark} />
-      <ImmuneCell position={[-2, 1.2, 0]} scale={0.9} isDark={isDark} />
-      <ImmuneCell position={[-2.4, -1.4, -0.5]} scale={0.7} isDark={isDark} />
-      <ImmuneCell position={[0.2, -1.8, 0.5]} scale={0.6} isDark={isDark} />
+      <ResponsiveDnaContent isDark={isDark} />
     </SceneCanvas>
   );
 };

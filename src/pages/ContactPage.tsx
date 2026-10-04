@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import {
   MapPin,
   Phone,
@@ -21,7 +20,7 @@ export const ContactPage: React.FC = () => {
     'https://maps.google.com/maps?q=Dr.%20Waseem%20Allergy%20Clinic,%20Unity%20Heights,%20Block%2013-C,%20Gulshan-e-Iqbal,%20Karachi&t=&z=16&ie=UTF8&iwloc=&output=embed';
 
   return (
-    <div className="relative min-h-screen pt-24 pb-20 overflow-hidden">
+    <div className="relative min-h-screen pt-20 sm:pt-24 pb-16 sm:pb-20 overflow-hidden w-full">
       {/* 3D Floating Location Pin & Radar Scene */}
       <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
         <LocationPinScene />
@@ -30,31 +29,31 @@ export const ContactPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header */}
-        <div className="max-w-3xl mb-14">
+        <div className="max-w-3xl mb-8 sm:mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-400 text-xs font-semibold mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>Clinic Address & Directions</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Contact & Clinic Location
           </h1>
-          <p className="text-base text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 mt-2 sm:mt-3 leading-relaxed">
             Conveniently located off University Road in Block 13-C, Gulshan-e-Iqbal, Karachi. Reach out via phone or WhatsApp, or use the interactive map below for turn-by-turn directions.
           </p>
         </div>
 
         {/* Contact Details & Map Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
           {/* Left Column: Clinic Information Cards */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-5">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-4 sm:space-y-5">
             {/* Address Card */}
-            <div className="p-6 rounded-3xl glass-panel border border-teal-500/25 space-y-4">
+            <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl glass-panel border border-teal-500/25 space-y-3.5 sm:space-y-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-2xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
+                <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
                     Clinic Address
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-1">
@@ -63,9 +62,9 @@ export const ContactPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200/50 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2 text-cyan-400 font-semibold">
-                  <Navigation className="w-4 h-4" />
+              <div className="pt-2.5 sm:pt-3 border-t border-slate-200/50 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2 text-cyan-400 font-semibold text-[11px] sm:text-xs">
+                  <Navigation className="w-3.5 sm:w-4 h-3.5 sm:h-4 shrink-0" />
                   <span>Plus Code: W36Q+Q4 Gulshan-e-Iqbal, Karachi</span>
                 </div>
               </div>
@@ -75,7 +74,7 @@ export const ContactPage: React.FC = () => {
                   href={googleMapsDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:brightness-110 transition"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:brightness-110 transition text-center"
                 >
                   <Navigation className="w-4 h-4" />
                   <span>Get Directions on Google Maps</span>
@@ -85,69 +84,69 @@ export const ContactPage: React.FC = () => {
             </div>
 
             {/* Phone & WhatsApp Card */}
-            <div className="p-6 rounded-3xl glass-panel border border-teal-500/25 space-y-4">
+            <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl glass-panel border border-teal-500/25 space-y-3.5 sm:space-y-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
                     Phone & WhatsApp Contact
                   </h3>
-                  <p className="text-lg font-extrabold text-teal-400 mt-0.5">
+                  <p className="text-base sm:text-lg font-extrabold text-teal-400 mt-0.5">
                     +92 323 3772039
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Available for appointment inquiries and clinic directions
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
                 <a
                   href="tel:+923233772039"
-                  className="py-2.5 px-4 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-300 font-bold text-xs flex items-center justify-center gap-2 hover:bg-teal-500/25 transition"
+                  className="py-2.5 sm:py-3 px-4 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-300 font-bold text-xs flex items-center justify-center gap-2 hover:bg-teal-500/25 transition text-center"
                 >
-                  <Phone className="w-4 h-4" />
+                  <Phone className="w-4 h-4 shrink-0" />
                   <span>Click to Call</span>
                 </a>
                 <a
                   href="https://wa.me/923233772039"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 px-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center justify-center gap-2 hover:bg-emerald-500/30 transition"
+                  className="py-2.5 sm:py-3 px-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center justify-center gap-2 hover:bg-emerald-500/30 transition text-center"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="w-4 h-4 shrink-0" />
                   <span>WhatsApp Chat</span>
                 </a>
               </div>
             </div>
 
             {/* Clinic Timings Card */}
-            <div className="p-6 rounded-3xl glass-panel border border-teal-500/25 space-y-3">
+            <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl glass-panel border border-teal-500/25 space-y-2.5 sm:space-y-3">
               <div className="flex items-start gap-3.5">
-                <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
                     Clinic Timings
                   </h3>
-                  <p className="text-sm font-extrabold text-amber-400 mt-0.5">
+                  <p className="text-xs sm:text-sm font-extrabold text-amber-400 mt-0.5">
                     Every Night: 10:00 PM to 11:30 PM
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Monday through Sunday • Evening/Night Consultations
                   </p>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200/50 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-                <span className="flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-cyan-400" />
-                  Daytime: Pakistan Allergy & Asthma Centre
+              <div className="pt-2.5 sm:pt-3 border-t border-slate-200/50 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                <span className="flex items-center gap-1.5 text-[11px] sm:text-xs truncate">
+                  <Building2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                  Day: Pakistan Allergy & Asthma
                 </span>
-                <span className="flex items-center gap-1 text-amber-400 font-bold">
+                <span className="flex items-center gap-1 text-amber-400 font-bold text-xs shrink-0">
                   <Star className="w-3.5 h-3.5 fill-amber-400" /> 4.0 (14)
                 </span>
               </div>
@@ -156,18 +155,18 @@ export const ContactPage: React.FC = () => {
 
           {/* Right Column: Embedded Interactive Google Map */}
           <div className="lg:col-span-7 flex flex-col">
-            <div className="flex-1 min-h-[420px] rounded-3xl glass-panel p-3 border border-teal-500/30 shadow-2xl flex flex-col">
-              <div className="flex items-center justify-between px-3 py-2.5 mb-2">
+            <div className="flex-1 min-h-[320px] sm:min-h-[400px] lg:min-h-[440px] rounded-2xl sm:rounded-3xl glass-panel p-2.5 sm:p-3.5 border border-teal-500/30 shadow-2xl flex flex-col">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-3 py-2 sm:py-2.5 mb-1.5 sm:mb-2 gap-1">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse" />
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">
-                    Dr. Waseem Allergy Clinic — Gulshan-e-Iqbal, Karachi
+                  <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse shrink-0" />
+                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                    Dr. Waseem Allergy Clinic — Karachi
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-400">Opposite Haq Bahu Apartments</span>
+                <span className="text-[10px] sm:text-[11px] text-slate-400">Opposite Haq Bahu Apartments</span>
               </div>
 
-              <div className="relative flex-1 w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 min-h-[360px]">
+              <div className="relative flex-1 w-full rounded-xl sm:rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 min-h-[260px] sm:min-h-[340px]">
                 <iframe
                   title="Google Map Location for Dr. Waseem Allergy Clinic, Gulshan-e-Iqbal, Karachi"
                   src={googleMapsEmbedUrl}

@@ -39,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
 
   useEffect(() => {
     setMobileMenuOpen(false);
+    setUserDropdownOpen(false);
   }, [location.pathname]);
 
   const isClinicOpenNow = () => {
@@ -62,29 +63,31 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'py-2.5 bg-slate-950/85 dark:bg-slate-950/85 bg-white/90 backdrop-blur-md shadow-lg border-b border-teal-500/15'
-          : 'py-4 bg-transparent'
+          ? 'py-2 sm:py-2.5 bg-slate-950/90 dark:bg-slate-950/90 bg-white/95 backdrop-blur-md shadow-lg border-b border-teal-500/15'
+          : 'py-3 sm:py-4 bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-400 p-0.5 shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
+          {/* Clinic Brand */}
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+            <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-400 p-0.5 shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
               <div className="w-full h-full rounded-[10px] bg-slate-950 dark:bg-slate-950 bg-white flex items-center justify-center">
-                <ShieldCheck className="w-6 h-6 text-teal-400" />
+                <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
               </div>
             </div>
             <div>
-              <span className="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                Dr. Waseem <span className="text-teal-500">Allergy Clinic</span>
+              <span className="text-sm sm:text-base md:text-lg font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+                Dr. Waseem <span className="text-teal-500">Allergy</span>
               </span>
-              <span className="block text-[11px] font-medium text-slate-500 dark:text-slate-400">
+              <span className="block text-[10px] sm:text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate max-w-[140px] sm:max-w-none">
                 Gulshan-e-Iqbal, Karachi
               </span>
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* Desktop & Laptop Navigation Links */}
+          <nav className="hidden xl:flex items-center gap-1.5">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -110,8 +113,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
             })}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-teal-500/10 dark:bg-teal-500/15 border border-teal-500/30 text-teal-600 dark:text-teal-300">
+          {/* Right Action Icons & Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            {/* Night clinic hours indicator */}
+            <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-teal-500/10 dark:bg-teal-500/15 border border-teal-500/30 text-teal-600 dark:text-teal-300">
               <span
                 className={`w-2 h-2 rounded-full ${
                   isClinicOpenNow() ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'
@@ -121,10 +126,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
               <span>10:00 PM – 11:30 PM Nightly</span>
             </div>
 
+            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500/40 text-slate-700 dark:text-slate-300 hover:text-teal-500 transition-colors bg-white/70 dark:bg-slate-900/70"
+              className="p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500/40 text-slate-700 dark:text-slate-300 hover:text-teal-500 transition-colors bg-white/70 dark:bg-slate-900/70 shrink-0"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isDark ? (
@@ -142,7 +148,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
                     key="moon"
                     initial={{ rotate: 90, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
+                    exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
                     <Moon className="w-4 h-4 text-teal-600" />
@@ -151,11 +157,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
               </AnimatePresence>
             </button>
 
+            {/* User Profile / Google Sign In */}
             {user ? (
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 p-1.5 rounded-xl border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-teal-400 transition"
+                  className="flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-xl border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-teal-400 transition"
                 >
                   {user.photoURL ? (
                     <img src={user.photoURL} alt={user.displayName || 'User'} className="w-7 h-7 rounded-full" />
@@ -164,7 +171,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
                       {user.displayName?.[0] || 'U'}
                     </div>
                   )}
-                  <span className="hidden sm:inline text-xs font-semibold max-w-[90px] truncate text-slate-800 dark:text-slate-200">
+                  <span className="hidden md:inline text-xs font-semibold max-w-[80px] truncate text-slate-800 dark:text-slate-200">
                     {user.displayName?.split(' ')[0] || 'Patient'}
                   </span>
                   {isAdmin && (
@@ -218,104 +225,125 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPortal }) => {
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-teal-500/40 text-teal-600 dark:text-teal-300 hover:bg-teal-500/10 transition"
               >
                 <UserIcon className="w-3.5 h-3.5" />
-                <span>Google Sign In</span>
+                <span className="hidden md:inline">Google Sign In</span>
+                <span className="md:hidden">Sign In</span>
               </button>
             )}
 
+            {/* Book CTA on Desktop & Tablet */}
             <Link
               to="/appointment"
-              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 hover:brightness-110 active:scale-95 shadow-md shadow-teal-500/25 transition-all"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 hover:brightness-110 active:scale-95 shadow-md shadow-teal-500/25 transition-all"
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>Book Visit</span>
             </Link>
 
+            {/* Mobile / Tablet Drawer Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:text-teal-400"
-              aria-label="Toggle menu"
+              className="xl:hidden p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:text-teal-400 focus:outline-none"
+              aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
           </div>
         </div>
       </div>
 
+      {/* Mobile & Tablet Full Navigation Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-slate-950/95 dark:bg-slate-950/95 bg-white/95 backdrop-blur-xl border-b border-teal-500/20 px-4 pt-3 pb-6 shadow-2xl"
-          >
-            <div className="flex flex-col gap-1.5">
-              <div className="p-3 mb-2 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-teal-400" />
-                  <span className="font-semibold text-teal-300">Hours: 10:00 PM – 11:30 PM Nightly</span>
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 top-[56px] sm:top-[68px] bg-slate-950/60 backdrop-blur-sm z-40 xl:hidden"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-50 xl:hidden bg-slate-950/98 dark:bg-slate-950/98 bg-white/98 backdrop-blur-2xl border-b border-teal-500/20 px-4 pt-3 pb-6 shadow-2xl max-h-[calc(100vh-70px)] overflow-y-auto"
+            >
+              <div className="flex flex-col gap-1.5 max-w-lg mx-auto">
+                {/* Night hours status badge */}
+                <div className="p-3 mb-2 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-teal-400 shrink-0" />
+                    <span className="font-semibold text-teal-600 dark:text-teal-300">Hours: 10:00 PM – 11:30 PM Nightly</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-400 text-[10px] font-bold">
+                    {isClinicOpenNow() ? 'OPEN' : 'NIGHTS'}
+                  </span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-bold">
-                  {isClinicOpenNow() ? 'OPEN' : 'NIGHTS'}
-                </span>
-              </div>
 
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.path;
-                return (
+                {navLinks.map((link) => {
+                  const isActive = location.pathname === link.path;
+                  return (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`px-4 py-3 rounded-xl text-sm font-medium transition flex items-center justify-between ${
+                        isActive
+                          ? 'bg-teal-500/20 text-teal-400 font-bold border-l-4 border-teal-400'
+                          : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                      }`}
+                    >
+                      <span>{link.name}</span>
+                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />}
+                    </Link>
+                  );
+                })}
+
+                <div className="pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
+                  {!user && (
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        loginWithGoogle();
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-teal-500/40 text-teal-600 dark:text-teal-400 text-sm font-semibold"
+                    >
+                      <UserIcon className="w-4 h-4" />
+                      <span>Sign in with Google</span>
+                    </button>
+                  )}
+                  {onOpenPortal && user && (
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onOpenPortal();
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-800/80 text-teal-300 text-sm font-semibold"
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>{isAdmin ? 'Admin Dashboard' : 'My Appointments'}</span>
+                    </button>
+                  )}
                   <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`px-4 py-2.5 rounded-xl text-sm font-medium transition ${
-                      isActive
-                        ? 'bg-teal-500/20 text-teal-400 font-bold border-l-4 border-teal-400'
-                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60'
-                    }`}
+                    to="/appointment"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-bold text-sm shadow-md"
                   >
-                    {link.name}
+                    <Calendar className="w-4 h-4" />
+                    <span>Book Appointment</span>
                   </Link>
-                );
-              })}
-
-              <div className="pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
-                {!user && (
-                  <button
-                    onClick={() => loginWithGoogle()}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-teal-500/40 text-teal-400 text-sm font-semibold"
+                  <a
+                    href="tel:+923233772039"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium"
                   >
-                    <UserIcon className="w-4 h-4" />
-                    <span>Sign in with Google</span>
-                  </button>
-                )}
-                {onOpenPortal && user && (
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onOpenPortal();
-                    }}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-800/80 text-teal-300 text-sm font-semibold"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>{isAdmin ? 'Admin Dashboard' : 'My Appointments'}</span>
-                  </button>
-                )}
-                <Link
-                  to="/appointment"
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-bold text-sm shadow-md"
-                >
-                  <Calendar className="w-4 h-4" />
-                  <span>Book Appointment</span>
-                </Link>
-                <a
-                  href="tel:+923233772039"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-700 text-slate-300 text-sm font-medium"
-                >
-                  <Phone className="w-4 h-4 text-teal-400" />
-                  <span>Call: +92 323 3772039</span>
-                </a>
+                    <Phone className="w-4 h-4 text-teal-500" />
+                    <span>Call: +92 323 3772039</span>
+                  </a>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

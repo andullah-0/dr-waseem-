@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { SceneCanvas, Float } from './SceneCanvas';
 import { useTheme } from '../../context/ThemeContext';
@@ -8,6 +8,10 @@ function LocationBeacon({ isDark }: { isDark: boolean }) {
   const pinGroupRef = useRef<THREE.Group>(null!);
   const ring1Ref = useRef<THREE.Mesh>(null!);
   const ring2Ref = useRef<THREE.Mesh>(null!);
+  const { width } = useThree((state) => state.viewport);
+
+  const position: [number, number, number] = width < 6 ? [0.4, 0.4, -0.8] : [1.5, 0, 0];
+  const scale = width < 6 ? 0.75 : 1;
 
   useFrame((state, delta) => {
     if (pinGroupRef.current) {
@@ -33,7 +37,7 @@ function LocationBeacon({ isDark }: { isDark: boolean }) {
   const accentColor = '#38bdf8';
 
   return (
-    <group position={[1.5, 0, 0]}>
+    <group position={position} scale={scale}>
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
         <group ref={pinGroupRef} position={[0, 0.4, 0]}>
           <mesh position={[0, 0.6, 0]}>

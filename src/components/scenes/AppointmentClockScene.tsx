@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { SceneCanvas, Float } from './SceneCanvas';
 import { useTheme } from '../../context/ThemeContext';
@@ -7,6 +7,10 @@ import { useTheme } from '../../context/ThemeContext';
 function NightClock3D({ isDark }: { isDark: boolean }) {
   const clockGroupRef = useRef<THREE.Group>(null!);
   const minuteHandRef = useRef<THREE.Mesh>(null!);
+  const { width } = useThree((state) => state.viewport);
+
+  const position: [number, number, number] = width < 6 ? [0.4, 0.4, -1] : [1.8, 0, 0];
+  const scale = width < 6 ? 0.75 : 1;
 
   useFrame((state, delta) => {
     if (clockGroupRef.current) {
@@ -22,7 +26,7 @@ function NightClock3D({ isDark }: { isDark: boolean }) {
 
   return (
     <Float speed={1.5} rotationIntensity={0.6} floatIntensity={1}>
-      <group ref={clockGroupRef} position={[1.8, 0, 0]} rotation={[0.1, -0.3, 0]}>
+      <group ref={clockGroupRef} position={position} scale={scale} rotation={[0.1, -0.3, 0]}>
         <mesh>
           <torusGeometry args={[1.3, 0.06, 16, 64]} />
           <meshStandardMaterial

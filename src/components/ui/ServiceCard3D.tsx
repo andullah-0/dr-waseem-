@@ -102,10 +102,12 @@ export const ServiceCard3D: React.FC<ServiceCardProps> = ({
   const mouseXSpring = useSpring(x, { stiffness: 250, damping: 25 });
   const mouseYSpring = useSpring(y, { stiffness: 250, damping: 25 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['9deg', '-9deg']);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-9deg', '9deg']);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7deg', '-7deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7deg', '7deg']);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only apply 3D tilt on devices with hover capability (pointer: fine)
+    if (window.matchMedia('(hover: none)').matches) return;
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
@@ -135,39 +137,39 @@ export const ServiceCard3D: React.FC<ServiceCardProps> = ({
         rotateY,
         transformStyle: 'preserve-3d',
       }}
-      className="relative rounded-2xl glass-panel p-6 sm:p-7 flex flex-col justify-between transition-shadow duration-300 border border-teal-500/20 hover:border-teal-400/50 hover:shadow-xl hover:shadow-teal-500/10 group cursor-pointer"
+      className="relative rounded-2xl glass-panel p-5 sm:p-7 flex flex-col justify-between transition-shadow duration-300 border border-teal-500/20 hover:border-teal-400/50 hover:shadow-xl hover:shadow-teal-500/10 group cursor-pointer"
     >
       <div
         className={`absolute -inset-px rounded-2xl bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-teal-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10`}
       />
 
-      <div style={{ transform: 'translateZ(30px)' }}>
+      <div style={{ transform: 'translateZ(20px)' }}>
         <div className="flex items-center justify-between mb-4">
-          <div className="w-16 h-16 rounded-xl bg-teal-500/10 dark:bg-slate-900/60 border border-teal-500/30 flex items-center justify-center overflow-hidden">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-teal-500/10 dark:bg-slate-900/60 border border-teal-500/30 flex items-center justify-center overflow-hidden shrink-0">
             <Mini3DIcon shape={iconShape} isDark={isDark} />
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-teal-500/15 text-teal-400 border border-teal-500/30">
+          <span className="text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-teal-500/15 text-teal-400 border border-teal-500/30">
             {subtitle}
           </span>
         </div>
 
-        <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-3 text-slate-900 dark:text-white group-hover:text-teal-400 transition-colors">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight mb-2.5 text-slate-900 dark:text-white group-hover:text-teal-400 transition-colors">
           {title}
         </h3>
 
-        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
           {description}
         </p>
 
         <div className="mb-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 mb-2">
+          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 mb-2">
             Frequent Symptoms:
           </p>
           <div className="flex flex-wrap gap-1.5">
             {symptoms.map((s, idx) => (
               <span
                 key={idx}
-                className="text-xs px-2 py-0.5 rounded-md bg-slate-200/70 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300"
+                className="text-[11px] sm:text-xs px-2 py-0.5 rounded-md bg-slate-200/70 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300"
               >
                 {s}
               </span>
@@ -175,19 +177,19 @@ export const ServiceCard3D: React.FC<ServiceCardProps> = ({
           </div>
         </div>
 
-        <div className="text-xs text-teal-600 dark:text-teal-300/90 font-medium mb-6 bg-teal-500/5 dark:bg-teal-950/30 p-2.5 rounded-lg border border-teal-500/15">
+        <div className="text-[11px] sm:text-xs text-teal-600 dark:text-teal-300/90 font-medium mb-5 sm:mb-6 bg-teal-500/5 dark:bg-teal-950/30 p-2.5 rounded-lg border border-teal-500/15">
           <strong className="block text-slate-800 dark:text-slate-200 mb-0.5">Clinical Approach:</strong>
           {treatment}
         </div>
       </div>
 
-      <div style={{ transform: 'translateZ(40px)' }} className="pt-2 border-t border-slate-200/50 dark:border-slate-800/80">
+      <div style={{ transform: 'translateZ(30px)' }} className="pt-2 border-t border-slate-200/50 dark:border-slate-800/80">
         <Link
           to="/appointment"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 dark:text-teal-400 group-hover:translate-x-1 transition-transform"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-teal-600 dark:text-teal-400 group-hover:translate-x-1 transition-transform"
         >
           <span>Book Consultation for this</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </Link>
       </div>
     </motion.div>

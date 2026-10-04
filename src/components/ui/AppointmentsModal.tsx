@@ -62,28 +62,28 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({ isOpen, on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="w-full max-w-2xl bg-slate-900 border border-teal-500/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+        className="w-full max-w-2xl bg-slate-900 border border-teal-500/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]"
       >
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+        <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
               <Calendar className="w-5 h-5" />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-white">
+            <div className="min-w-0">
+              <h2 className="text-base sm:text-lg font-bold text-white truncate">
                 {isAdmin ? 'Admin Appointment Manager' : 'My Clinic Appointments'}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-[11px] sm:text-xs text-slate-400 truncate">
                 {isAdmin ? 'Live database feed of patient requests' : 'Your consultation bookings with Dr. Waseem'}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={loadData}
               disabled={loading}
@@ -101,24 +101,24 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({ isOpen, on
           </div>
         </div>
 
-        <div className="p-6 overflow-y-auto space-y-4 flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 flex-1">
           {!user ? (
-            <div className="text-center py-10 space-y-4">
-              <p className="text-slate-300 text-sm">Please sign in with Google to view your appointments.</p>
+            <div className="text-center py-8 sm:py-10 space-y-4">
+              <p className="text-slate-300 text-xs sm:text-sm">Please sign in with Google to view your appointments.</p>
               <button
                 onClick={() => loginWithGoogle()}
-                className="px-5 py-2.5 rounded-xl bg-teal-500 text-slate-950 font-bold text-sm shadow-md"
+                className="px-5 py-2.5 rounded-xl bg-teal-500 text-slate-950 font-bold text-xs sm:text-sm shadow-md"
               >
                 Sign In with Google
               </button>
             </div>
           ) : loading ? (
-            <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-400">
+            <div className="py-10 sm:py-12 flex flex-col items-center justify-center gap-3 text-slate-400">
               <RefreshCw className="w-6 h-6 animate-spin text-teal-400" />
               <p className="text-xs">Fetching records from Firestore...</p>
             </div>
           ) : appointments.length === 0 ? (
-            <div className="text-center py-12 space-y-3">
+            <div className="text-center py-10 sm:py-12 space-y-3">
               <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
                 <FileText className="w-6 h-6" />
               </div>
@@ -134,11 +134,11 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({ isOpen, on
               {appointments.map((app) => (
                 <div
                   key={app.id}
-                  className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-teal-500/30 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="p-3.5 sm:p-4 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-teal-500/30 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4"
                 >
-                  <div className="space-y-1.5 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-white text-sm">{app.patientName}</span>
+                  <div className="space-y-1.5 flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-white text-sm truncate">{app.patientName}</span>
                       <span className="text-xs text-slate-400">({app.age} yrs)</span>
                       <span
                         className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
@@ -157,28 +157,28 @@ export const AppointmentsModal: React.FC<AppointmentsModalProps> = ({ isOpen, on
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-teal-400" />
+                        <Calendar className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                         {app.preferredDate} (10:00 PM – 11:30 PM)
                       </span>
                       <span className="flex items-center gap-1">
-                        <Phone className="w-3.5 h-3.5 text-teal-400" />
+                        <Phone className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                         {app.phone}
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-300 italic pt-1 line-clamp-2">
+                    <p className="text-xs text-slate-300 italic pt-0.5 line-clamp-2">
                       &quot;{app.problemDescription}&quot;
                     </p>
                   </div>
 
-                  <div className="flex sm:flex-col items-center gap-2 shrink-0">
+                  <div className="flex sm:flex-col items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-0 border-slate-800">
                     <a
                       href={`https://wa.me/${app.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
                         `Assalam-o-Alaikum ${app.patientName}, regarding your allergy appointment at Dr. Waseem Clinic.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold hover:bg-emerald-500/30 flex items-center gap-1.5"
+                      className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold hover:bg-emerald-500/30 flex items-center gap-1.5 shrink-0"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
                       <span>WhatsApp</span>
